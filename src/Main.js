@@ -246,6 +246,37 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
     setInput('');
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const words = input.split(' ');
+      const lastWord = words[words.length - 1].toLowerCase();
+      if (!lastWord && words.length === 1) return;
+
+      let suggestions = [];
+      
+      if (words.length === 1) {
+        // Complete commands
+        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt', 'unlock'];
+        suggestions = commands.filter(c => c.startsWith(lastWord));
+      } else {
+        // Complete files based on path
+        let files = [];
+        if (currentPath === '~' || currentPath === '/') {
+          files = ['archives', '.note_interne.txt'];
+        } else if (currentPath === '/archives') {
+          files = ['photo_de_groupe_b3.png'];
+        }
+        suggestions = files.filter(f => f.toLowerCase().startsWith(lastWord));
+      }
+
+      if (suggestions.length === 1) {
+        words[words.length - 1] = suggestions[0];
+        setInput(words.join(' '));
+      }
+    }
+  };
+
   return (
     <div className="App" onClick={(e) => {
       if (!e.target.closest('.notification-bell') && !e.target.closest('.notification-modal')) {
@@ -324,6 +355,7 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="terminal-input"
               autoFocus
               spellCheck="false"
