@@ -42,6 +42,7 @@ function Main() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [currentPath, setCurrentPath] = useState('~');
+  const [isArchivesUnlocked, setIsArchivesUnlocked] = useState(false);
   const [userId, setUserId] = useState('');
   const [os, setOs] = useState('');
   const [notifications, setNotifications] = useState([]);
@@ -127,8 +128,10 @@ function Main() {
   CLEAR     - Efface le terminal
   CD        - Changer de répertoire
   LS        - Lister le contenu du répertoire
+  CAT       - Afficher le contenu d'un fichier
   DOWNLOAD  - Télécharger un fichier localement
-  DECRYPT   - Décrypter un message`;
+  DECRYPT   - Décrypter un message
+  UNLOCK    - Déverrouiller un répertoire protégé`;
         break;
       case 'ping':
         response = 'PONG';
@@ -137,9 +140,40 @@ function Main() {
         setOutput([]);
         setInput('');
         return;
+      case 'unlock':
+        if (args[1] === '1.20') {
+          setIsArchivesUnlocked(true);
+          response = '[OK] Répertoires protégés déverrouillés.';
+        } else if (!args[1]) {
+          response = 'Usage: UNLOCK <code>';
+        } else {
+          response = '[ERREUR] Code incorrect.';
+        }
+        break;
+      case 'cat':
+        if (args[1] === '.note_interne.txt') {
+          if (currentPath === '~' || currentPath === '/') {
+            response = `[NOTE INTERNE - RÉSEAU YNOV]
+Le Wi-Fi du campus est encore tombé. Le projet secret a été déplacé sur un serveur local situé derrière la machine à café du 2ème étage.
+Accès via /archives.`;
+          } else {
+            response = 'cat: .note_interne.txt: Aucun fichier ou dossier de ce type';
+          }
+        } else if (args[1] === 'note_interne.txt') {
+            response = 'cat: note_interne.txt: Aucun fichier ou dossier de ce type (Peut-être s\'agit-il d\'un fichier caché ?)';
+        } else if (!args[1]) {
+          response = 'cat: veuillez spécifier un fichier à lire.';
+        } else {
+          response = `cat: ${args[1]}: Aucun fichier ou dossier de ce type`;
+        }
+        break;
       case 'cd':
         if (args[1] === '/archives' || args[1] === 'archives') {
-          newPath = '/archives';
+          if (isArchivesUnlocked) {
+            newPath = '/archives';
+          } else {
+            response = `cd: archives: Accès refusé. Ce répertoire est verrouillé.`;
+          }
         } else if (args[1] === '/' || args[1] === '..' || args[1] === '~') {
           newPath = '~';
         } else if (!args[1]) {
@@ -149,10 +183,25 @@ function Main() {
         }
         break;
       case 'ls':
+        const isLong = args.includes('-la') || args.includes('-l');
+        const isAll = args.includes('-a') || args.includes('-la');
         if (currentPath === '~' || currentPath === '/') {
-          response = 'd rwxr-xr-x  archives';
+          if (isLong) {
+            response = `total 2
+d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
+- rw-r--r--  1 user  staff  152 Mar 30 14:45 .note_interne.txt`;
+          } else if (isAll) {
+            response = 'archives/  .note_interne.txt';
+          } else {
+            response = 'archives/';
+          }
         } else if (currentPath === '/archives') {
-          response = '- rw-r--r--  photo_de_groupe_b3.png';
+          if (isLong) {
+            response = `total 1
+- rw-r--r--  1 user  staff  5048 Mar 30 09:46 photo_de_groupe_b3.png`;
+          } else {
+            response = 'photo_de_groupe_b3.png';
+          }
         }
         break;
       case 'download':
@@ -195,6 +244,37 @@ function Main() {
     setOutput([...output, { command: rawInput, response, path: currentPath }]);
     setCurrentPath(newPath);
     setInput('');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const words = input.split(' ');
+      const lastWord = words[words.length - 1].toLowerCase();
+      if (!lastWord && words.length === 1) return;
+
+      let suggestions = [];
+      
+      if (words.length === 1) {
+        // Complete commands
+        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt', 'unlock'];
+        suggestions = commands.filter(c => c.startsWith(lastWord));
+      } else {
+        // Complete files based on path
+        let files = [];
+        if (currentPath === '~' || currentPath === '/') {
+          files = ['archives', '.note_interne.txt'];
+        } else if (currentPath === '/archives') {
+          files = ['photo_de_groupe_b3.png'];
+        }
+        suggestions = files.filter(f => f.toLowerCase().startsWith(lastWord));
+      }
+
+      if (suggestions.length === 1) {
+        words[words.length - 1] = suggestions[0];
+        setInput(words.join(' '));
+      }
+    }
   };
 
   return (
@@ -275,6 +355,7 @@ function Main() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="terminal-input"
               autoFocus
               spellCheck="false"
