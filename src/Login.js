@@ -29,6 +29,7 @@ function Login() {
 
   return (
     <div className="page-shell">
+    <div className="" style={{ display: 'none' }} id="joueur" password="joueur"/>
       <div className="login-card">
         <div className="left-panel">
           <div className="top-row">
