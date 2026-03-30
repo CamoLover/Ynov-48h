@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 // Cookie helper functions
 const setCookie = (name, value, days) => {
@@ -34,18 +35,8 @@ const getOS = () => {
   return 'Unknown';
 };
 
-const randomNotifications = [
-  'Système de sécurité activé',
-  'Connexion sécurisée établie',
-  'Nouveau message dans le système',
-  'Mise à jour du serveur disponible',
-  'Accès au réseau détecté',
-  'Tentative de connexion enregistrée',
-  'Fichier système synchronisé',
-  'Analyse de sécurité terminée',
-  'Nouvelle tâche assignée',
-  'Sauvegarde automatique effectuée'
-];
+// WebSocket connection URL
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:3001';
 
 function Main() {
   const [input, setInput] = useState('');
@@ -72,14 +63,26 @@ function Main() {
     // Detect OS
     setOs(getOS());
 
-    // Add random notifications at different times
-    const timeouts = [
-      setTimeout(() => addNotification(randomNotifications[Math.floor(Math.random() * randomNotifications.length)]), 2000),
-      setTimeout(() => addNotification(randomNotifications[Math.floor(Math.random() * randomNotifications.length)]), 5000),
-      setTimeout(() => addNotification(randomNotifications[Math.floor(Math.random() * randomNotifications.length)]), 10000)
-    ];
+    // Connect to WebSocket server
+    const socket = io(SOCKET_URL);
 
-    return () => timeouts.forEach(clearTimeout);
+    socket.on('connect', () => {
+      console.log('Connected to notification server');
+      addNotification('Connexion au serveur établie');
+    });
+
+    socket.on('notification', (data) => {
+      console.log('Received notification:', data);
+      addNotification(data.message);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from notification server');
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const addNotification = (message) => {
