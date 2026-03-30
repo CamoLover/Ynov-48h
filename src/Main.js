@@ -151,14 +151,16 @@ function Main() {
         }
         break;
       case 'cat':
-        if (args[1] === 'note_interne.txt') {
+        if (args[1] === '.note_interne.txt') {
           if (currentPath === '~' || currentPath === '/') {
             response = `[NOTE INTERNE - RÉSEAU YNOV]
 Le Wi-Fi du campus est encore tombé. Le projet secret a été déplacé sur un serveur local situé derrière la machine à café du 2ème étage.
 Accès via /archives.`;
           } else {
-            response = 'cat: note_interne.txt: Aucun fichier ou dossier de ce type';
+            response = 'cat: .note_interne.txt: Aucun fichier ou dossier de ce type';
           }
+        } else if (args[1] === 'note_interne.txt') {
+            response = 'cat: note_interne.txt: Aucun fichier ou dossier de ce type (Peut-être s\'agit-il d\'un fichier caché ?)';
         } else if (!args[1]) {
           response = 'cat: veuillez spécifier un fichier à lire.';
         } else {
@@ -182,13 +184,16 @@ Accès via /archives.`;
         break;
       case 'ls':
         const isLong = args.includes('-la') || args.includes('-l');
+        const isAll = args.includes('-a') || args.includes('-la');
         if (currentPath === '~' || currentPath === '/') {
           if (isLong) {
             response = `total 2
 d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
-- rw-r--r--  1 user  staff  152 Mar 30 14:45 note_interne.txt`;
+- rw-r--r--  1 user  staff  152 Mar 30 14:45 .note_interne.txt`;
+          } else if (isAll) {
+            response = 'archives/  .note_interne.txt';
           } else {
-            response = 'archives/  note_interne.txt';
+            response = 'archives/';
           }
         } else if (currentPath === '/archives') {
           if (isLong) {
