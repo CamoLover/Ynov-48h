@@ -1,0 +1,110 @@
+.admin-auth {
+  background-color: #000000;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+}
+
+.auth-container {
+  border: 2px solid #00ff00;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  background-color: #001100;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header h1 {
+  color: #00ff00;
+  font-size: 24px;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+}
+
+.warning-text {
+  color: #ff0000;
+  font-size: 14px;
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  color: #00ff00;
+  font-size: 16px;
+}
+
+.password-input {
+  background-color: transparent;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  padding: 10px;
+  outline: none;
+}
+
+.password-input:focus {
+  border-color: #00cc00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ff0000;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.submit-btn,
+.back-btn {
+  flex: 1;
+  background-color: transparent;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #00ff00;
+  color: #000000;
+}
+
+.back-btn {
+  border-color: #ff0000;
+  color: #ff0000;
+}
+
+.back-btn:hover {
+  background-color: #ff0000;
+  color: #000000;
+}

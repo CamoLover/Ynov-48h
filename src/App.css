@@ -283,3 +283,14 @@
   color: #00ff00;
   opacity: 0.7;
 }
+
+.admin-link {
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.admin-link:hover {
+  color: #00cc00;
+  opacity: 1;
+}

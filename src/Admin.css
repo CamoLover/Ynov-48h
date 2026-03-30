@@ -1,0 +1,67 @@
+.admin-page {
+  background-color: #000000;
+  min-height: 100vh;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 40px 20px;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 2px solid #00ff00;
+  padding: 40px;
+  background-color: #001100;
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #00ff00;
+}
+
+.admin-header h1 {
+  color: #00ff00;
+  font-size: 28px;
+  margin-bottom: 15px;
+  letter-spacing: 3px;
+}
+
+.admin-content {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.placeholder-text {
+  color: #009900;
+  font-size: 18px;
+  text-align: center;
+}
+
+.admin-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid #00ff00;
+}
+
+.back-to-main-btn {
+  background-color: transparent;
+  border: 2px solid #00ff00;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  padding: 15px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.back-to-main-btn:hover {
+  background-color: #00ff00;
+  color: #000000;
+}
