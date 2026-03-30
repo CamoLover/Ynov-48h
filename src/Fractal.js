@@ -180,7 +180,10 @@ const Fractal = () => {
   };
 
   // Check secret spots (stable, no dependencies)
-  const checkSecretSpots = () => {
+  const checkSecretSpots = (isZoomingIn) => {
+    // Only show popup when zooming in, not zooming out
+    if (!isZoomingIn) return;
+
     const { centerX, centerY, zoom } = stateRef.current;
 
     for (const spot of secretSpots) {
@@ -284,6 +287,7 @@ const Fractal = () => {
     const fractalX = (mouseX - state.width / 2) / state.zoom + state.centerX;
     const fractalY = (mouseY - state.height / 2) / state.zoom + state.centerY;
 
+    const isZoomingIn = e.deltaY < 0;
     const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
     state.zoom = Math.max(minZoom, Math.min(maxZoom, state.zoom * zoomFactor));
 
@@ -292,7 +296,7 @@ const Fractal = () => {
 
     setZoomLevel(Math.round(state.zoom));
     drawFractalRef.current(4);
-    checkSecretSpots();
+    checkSecretSpots(isZoomingIn);
   }, []);
 
   // Handle window resize
