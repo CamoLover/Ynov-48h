@@ -12,6 +12,137 @@
   margin: 0 auto;
 }
 
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #00ff00;
+}
+
+.header-left {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.user-id, .os-info {
+  color: #00ff00;
+}
+
+.separator {
+  color: #00ff00;
+}
+
+.header-right {
+  position: relative;
+}
+
+.notification-bell {
+  background: transparent;
+  border: none;
+  color: #00ff00;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.notification-bell:hover {
+  color: #00cc00;
+}
+
+.notification-bell.has-unread {
+  animation: bellFlash 1s infinite;
+}
+
+@keyframes bellFlash {
+  0%, 100% { color: #00ff00; }
+  50% { color: #ff0000; }
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  background-color: #ff0000;
+  color: #000000;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.notification-modal {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 400px;
+  max-width: calc(100vw - 40px);
+  background-color: #001100;
+  border: 2px solid #00ff00;
+  z-index: 1000;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #00ff00;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #00ff00;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #ff0000;
+}
+
+.notification-list {
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.notification-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #003300;
+  color: #00ff00;
+  font-size: 14px;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notif-time {
+  color: #009900;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
 .ascii-art {
   color: #00ff00;
   font-size: 10px;
