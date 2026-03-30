@@ -57,7 +57,7 @@ const Archives = () => {
         {/* The hidden hint for Part 2 */}
         <div className="hidden-hint-wrapper">
           <p className="hidden-hint">
-            Le code d'accès est le prix exact d'un Twix au distributeur du rez-de-chaussée.
+            Le code d'accès est le prix exact d'un Mars au distributeur du rez-de-chaussée.
           </p>
         </div>
       </main>

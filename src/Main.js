@@ -170,9 +170,7 @@ Accès via /archives.`;
           if (isArchivesUnlocked) {
             newPath = '/archives';
           } else {
-            response = `cd: archives: Accès refusé. Ce répertoire est verrouillé.
-[AIDE] Le code de sécurité est le prix d'un Twix au distributeur du rez-de-chaussée.
-Utilisez la commande 'UNLOCK' pour entrer le code.`;
+            response = `cd: archives: Accès refusé. Ce répertoire est verrouillé.`;
           }
         } else if (args[1] === '/' || args[1] === '..' || args[1] === '~') {
           newPath = '~';
