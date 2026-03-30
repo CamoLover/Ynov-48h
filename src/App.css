@@ -134,6 +134,29 @@
   max-height: 350px;
 }
 
+/* Notification modal scrollbar */
+.notification-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background: #001100;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border: 1px solid #001100;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+}
+
+.notification-list {
+  scrollbar-width: thin;
+  scrollbar-color: #00ff00 #001100;
+}
+
 .notification-item {
   padding: 10px 15px;
   border-bottom: 1px solid #003300;
@@ -156,6 +179,31 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 0;
+}
+
+/* Custom scrollbar styling */
+.terminal-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.terminal-content::-webkit-scrollbar-track {
+  background: #001100;
+  border-left: 1px solid #00ff00;
+}
+
+.terminal-content::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border: 2px solid #001100;
+}
+
+.terminal-content::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+}
+
+/* Firefox scrollbar */
+.terminal-content {
+  scrollbar-width: thin;
+  scrollbar-color: #00ff00 #001100;
 }
 
 .ascii-art {
