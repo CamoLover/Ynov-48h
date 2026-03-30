@@ -5,6 +5,7 @@ import AdminAuth from './AdminAuth';
 import Admin from './Admin';
 import Archives from './Archives';
 import Login from './Login';
+import Fractal from './Fractal';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/admin" element={<AdminAuth />} />
         <Route path="/admin/dashboard" element={<Admin />} />
         <Route path="/archives" element={<Archives />} />
+        <Route path="/fractal" element={<Fractal />} />
       </Routes>
     </Router>
   );
