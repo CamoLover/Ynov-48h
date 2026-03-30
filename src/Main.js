@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import QRCodePuzzle from './QRCodePuzzle';
 
 // Cookie helper functions
 const setCookie = (name, value, days) => {
@@ -48,6 +49,7 @@ function Main() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isPuzzleActive, setIsPuzzleActive] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -237,6 +239,10 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
   Exemple: decrypt --caesar --shift 3 "texte_a_decrypter"`;
         }
         break;
+      case 'hack_cafet':
+        response = '[!] ERREUR : Tentative de piratage du solde IZLY détectée. Brouillage activé.';
+        setTimeout(() => setIsPuzzleActive(true), 2000);
+        break;
       default:
         response = `Commande inconnue: ${baseCommand}. Tapez HELP pour voir les commandes disponibles.`;
     }
@@ -257,7 +263,7 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
       
       if (words.length === 1) {
         // Complete commands
-        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt', 'unlock'];
+        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt', 'unlock', 'hack_cafet'];
         suggestions = commands.filter(c => c.startsWith(lastWord));
       } else {
         // Complete files based on path
@@ -277,12 +283,29 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
     }
   };
 
+  const handlePuzzleSolved = () => {
+    setIsPuzzleActive(false);
+    setOutput(prev => [...prev, { 
+      command: 'SYSTEM_SCAN', 
+      response: `[OK] QR Code Identifié.
+Message décrypté : "Félicitations, vous venez de payer un café virtuel à tout le staff technique."
+Instruction : Envoyez "CAFÉ" par mail à admin@ynov.com pour valider votre exploit.`, 
+      path: currentPath 
+    }]);
+  };
+
   return (
     <div className="App" onClick={(e) => {
       if (!e.target.closest('.notification-bell') && !e.target.closest('.notification-modal')) {
         inputRef.current?.focus();
       }
     }}>
+      {isPuzzleActive && (
+        <QRCodePuzzle 
+          onSolved={handlePuzzleSolved} 
+          onCancel={() => setIsPuzzleActive(false)} 
+        />
+      )}
       <div className="terminal">
         <div className="terminal-header">
           <div className="header-left">
