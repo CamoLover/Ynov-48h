@@ -175,7 +175,8 @@ function App() {
           </div>
         )}
 
-        <pre className="ascii-art">{`
+        <div className="terminal-content">
+          <pre className="ascii-art">{`
   ______  _____  _____          _____  ______   ______ _____   ____  __  __  __     ___   _  ______      __
  |  ____|/ ____|/ ____|   /\\   |  __ \\|  ____| |  ____|  __ \\ / __ \\|  \\/  | \\ \\   / / \\ | |/ __ \\ \\    / /
  | |__  | (___ | |       /  \\  | |__) | |__    | |__  | |__) | |  | | \\  / |  \\ \\_/ /|  \\| | |  | \\ \\  / /
@@ -186,31 +187,42 @@ function App() {
 
         <p className="help-text">Écrivez HELP pour afficher les commandes</p>
 
-        <div className="output">
-          {output.map((item, index) => (
-            <div key={index} className="output-block">
-              <div className="command-line">
-                <span className="prompt">user@EFYNOV:~$</span> {item.command}
+          <div className="output">
+            {output.map((item, index) => (
+              <div key={index} className="output-block">
+                <div className="command-line">
+                  <span className="prompt">user@EFYNOV:~$</span> {item.command}
+                </div>
+                {item.response && (
+                  <div className="response">{item.response}</div>
+                )}
               </div>
-              {item.response && (
-                <div className="response">{item.response}</div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <form onSubmit={handleCommand} className="input-line">
+            <span className="prompt">user@EFYNOV:~$</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="terminal-input"
+              autoFocus
+              spellCheck="false"
+            />
+          </form>
         </div>
 
-        <form onSubmit={handleCommand} className="input-line">
-          <span className="prompt">user@EFYNOV:~$</span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="terminal-input"
-            autoFocus
-            spellCheck="false"
-          />
-        </form>
+        <div className="terminal-footer">
+          <div className="footer-content">
+            <span>ESCAPE FROM YNOV v1.0.0</span>
+            <span className="separator">|</span>
+            <span>© 2026 YNOV</span>
+            <span className="separator">|</span>
+            <span>Système actif</span>
+          </div>
+        </div>
       </div>
     </div>
   );
