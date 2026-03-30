@@ -42,6 +42,7 @@ function Main() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [currentPath, setCurrentPath] = useState('~');
+  const [isArchivesUnlocked, setIsArchivesUnlocked] = useState(false);
   const [userId, setUserId] = useState('');
   const [os, setOs] = useState('');
   const [notifications, setNotifications] = useState([]);
@@ -127,8 +128,10 @@ function Main() {
   CLEAR     - Efface le terminal
   CD        - Changer de répertoire
   LS        - Lister le contenu du répertoire
+  CAT       - Afficher le contenu d'un fichier
   DOWNLOAD  - Télécharger un fichier localement
-  DECRYPT   - Décrypter un message`;
+  DECRYPT   - Décrypter un message
+  UNLOCK    - Déverrouiller un répertoire protégé`;
         break;
       case 'ping':
         response = 'PONG';
@@ -137,9 +140,40 @@ function Main() {
         setOutput([]);
         setInput('');
         return;
+      case 'unlock':
+        if (args[1] === '1.20') {
+          setIsArchivesUnlocked(true);
+          response = '[OK] Répertoires protégés déverrouillés.';
+        } else if (!args[1]) {
+          response = 'Usage: UNLOCK <code>';
+        } else {
+          response = '[ERREUR] Code incorrect.';
+        }
+        break;
+      case 'cat':
+        if (args[1] === 'note_interne.txt') {
+          if (currentPath === '~' || currentPath === '/') {
+            response = `[NOTE INTERNE - RÉSEAU YNOV]
+Le Wi-Fi du campus est encore tombé. Le projet secret a été déplacé sur un serveur local situé derrière la machine à café du 2ème étage.
+Accès via /archives.`;
+          } else {
+            response = 'cat: note_interne.txt: Aucun fichier ou dossier de ce type';
+          }
+        } else if (!args[1]) {
+          response = 'cat: veuillez spécifier un fichier à lire.';
+        } else {
+          response = `cat: ${args[1]}: Aucun fichier ou dossier de ce type`;
+        }
+        break;
       case 'cd':
         if (args[1] === '/archives' || args[1] === 'archives') {
-          newPath = '/archives';
+          if (isArchivesUnlocked) {
+            newPath = '/archives';
+          } else {
+            response = `cd: archives: Accès refusé. Ce répertoire est verrouillé.
+[AIDE] Le code de sécurité est le prix d'un Twix au distributeur du rez-de-chaussée.
+Utilisez la commande 'UNLOCK' pour entrer le code.`;
+          }
         } else if (args[1] === '/' || args[1] === '..' || args[1] === '~') {
           newPath = '~';
         } else if (!args[1]) {
@@ -149,10 +183,22 @@ function Main() {
         }
         break;
       case 'ls':
+        const isLong = args.includes('-la') || args.includes('-l');
         if (currentPath === '~' || currentPath === '/') {
-          response = 'd rwxr-xr-x  archives';
+          if (isLong) {
+            response = `total 2
+d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
+- rw-r--r--  1 user  staff  152 Mar 30 14:45 note_interne.txt`;
+          } else {
+            response = 'archives/  note_interne.txt';
+          }
         } else if (currentPath === '/archives') {
-          response = '- rw-r--r--  photo_de_groupe_b3.png';
+          if (isLong) {
+            response = `total 1
+- rw-r--r--  1 user  staff  5048 Mar 30 09:46 photo_de_groupe_b3.png`;
+          } else {
+            response = 'photo_de_groupe_b3.png';
+          }
         }
         break;
       case 'download':
