@@ -1,0 +1,7 @@
+# Passenger configuration for Node.js application
+PassengerEnabled on
+PassengerAppRoot /home/myrqtsjjvm/Escape-From-Ynov
+PassengerAppType node
+PassengerStartupFile server.js
+PassengerAppEnv production
+PassengerNodejs /home/myrqtsjjvm/nodevenv/Escape-From-Ynov/22/bin/node
