@@ -2,17 +2,80 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: black;
+  background: #0a0a0a;
   position: relative;
   width: 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.terminal-window {
+  width: 90vw;
+  height: 85vh;
+  background: #1a1a1a;
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(0, 255, 0, 0.3), 0 0 80px rgba(0, 255, 0, 0.1);
+  border: 2px solid rgba(0, 255, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terminal-header {
+  background: #0d0d0d;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.terminal-title {
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.terminal-button.close {
+  background: #ff5f56;
+}
+
+.terminal-button.minimize {
+  background: #ffbd2e;
+}
+
+.terminal-button.maximize {
+  background: #27c93f;
+}
+
+.terminal-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: black;
 }
 
 .instruction-text {
-  position: fixed;
+  position: absolute;
   top: 20px;
   left: 20px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   color: #0f0;
   padding: 12px 20px;
   border-radius: 6px;
@@ -35,8 +98,8 @@
 }
 
 .fractal-canvas {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -146,8 +209,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 10;
 }
@@ -198,6 +261,24 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .terminal-window {
+    width: 95vw;
+    height: 90vh;
+  }
+
+  .terminal-header {
+    padding: 8px 12px;
+  }
+
+  .terminal-title {
+    font-size: 11px;
+  }
+
+  .terminal-button {
+    width: 10px;
+    height: 10px;
+  }
+
   .popup {
     padding: 20px 30px;
     max-width: 80%;

@@ -304,8 +304,10 @@ const Fractal = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    // Get the actual container size
+    const container = canvas.parentElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
     canvas.width = width;
     canvas.height = height;
@@ -321,8 +323,10 @@ const Fractal = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    // Get the actual container size
+    const container = canvas.parentElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
     canvas.width = width;
     canvas.height = height;
@@ -348,33 +352,48 @@ const Fractal = () => {
 
   return (
     <div className="fractal-container">
-      <canvas ref={canvasRef} className="fractal-canvas" />
-
-      <div className="instruction-text">
-        Mettez les codes dans l'ordre alphabétique
-        <div className="zoom-indicator">Zoom: {zoomLevel.toLocaleString()}x</div>
-      </div>
-
-      <div ref={guidesRef} className="guides">
-        {secretSpots.map((spot, index) => (
-          <div
-            key={index}
-            className="guide-point"
-            style={{ background: spot.color }}
-          />
-        ))}
-      </div>
-
-      {popup.visible && (
-        <div className="popup">
-          <span className="close-btn" onClick={() => setPopup({ visible: false, text: '' })}>
-            &times;
-          </span>
-          <p className="secret-text">{popup.text}</p>
+      <div className="terminal-window">
+        <div className="terminal-header">
+          <div className="terminal-title">
+            MEMETIC FRACTAL EXPLORER v1.0
+          </div>
+          <div className="terminal-buttons">
+            <div className="terminal-button close"></div>
+            <div className="terminal-button minimize"></div>
+            <div className="terminal-button maximize"></div>
+          </div>
         </div>
-      )}
 
-      <div className="effects-overlay" />
+        <div className="terminal-content">
+          <canvas ref={canvasRef} className="fractal-canvas" />
+
+          <div className="instruction-text">
+            Mettez les codes dans l'ordre alphabétique
+            <div className="zoom-indicator">Zoom: {zoomLevel.toLocaleString()}x</div>
+          </div>
+
+          <div ref={guidesRef} className="guides">
+            {secretSpots.map((spot, index) => (
+              <div
+                key={index}
+                className="guide-point"
+                style={{ background: spot.color }}
+              />
+            ))}
+          </div>
+
+          {popup.visible && (
+            <div className="popup">
+              <span className="close-btn" onClick={() => setPopup({ visible: false, text: '' })}>
+                &times;
+              </span>
+              <p className="secret-text">{popup.text}</p>
+            </div>
+          )}
+
+          <div className="effects-overlay" />
+        </div>
+      </div>
     </div>
   );
 };
