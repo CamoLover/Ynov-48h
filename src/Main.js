@@ -341,7 +341,7 @@ Instruction : Envoyez "CAFÉ" par mail à ynov@camolover.dev pour valider votre 
         <div className="autodestruction-overlay">
           {showFinalMessage && (
             <div className="final-message">
-              Felicitation tu as reussi a pirater le systeme.
+              Les Portes de Ynov sont reouvertes
             </div>
           )}
         </div>
