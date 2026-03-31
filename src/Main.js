@@ -326,7 +326,7 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
       command: 'SYSTEM_SCAN', 
       response: `[OK] QR Code Identifié.
 Message décrypté : "Félicitations, vous venez de payer un café virtuel à tout le staff technique."
-Instruction : Envoyez "CAFÉ" par mail à admin@ynov.com pour valider votre exploit.`, 
+Instruction : Envoyez "CAFÉ" par mail à ynov@camolover.dev pour valider votre exploit.`, 
       path: currentPath 
     }]);
   };
