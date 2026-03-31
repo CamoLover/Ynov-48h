@@ -54,8 +54,16 @@ function Main() {
   const [isAutodestructionActive, setIsAutodestructionActive] = useState(false);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
   const inputRef = useRef(null);
+  const terminalContentRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Auto-scroll to bottom when output changes
+  useEffect(() => {
+    if (terminalContentRef.current) {
+      terminalContentRef.current.scrollTop = terminalContentRef.current.scrollHeight;
+    }
+  }, [output]);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -402,7 +410,7 @@ Instruction : Envoyez "CAFÉ" par mail à ynov@camolover.dev pour valider votre 
           </div>
         )}
 
-        <div className="terminal-content">
+        <div className="terminal-content" ref={terminalContentRef}>
           <pre className="ascii-art">{`
   ______  _____  _____          _____  ______   ______ _____   ____  __  __  __     ___   _  ______      __  ___   ___ ___   __
  |  ____|/ ____|/ ____|   /\\   |  __ \\|  ____| |  ____|  __ \\ / __ \\|  \\/  | \\ \\   / / \\ | |/ __ \\ \\    / / |__ \\ / _ \\__ \\ / /
