@@ -294,3 +294,34 @@
   color: #00cc00;
   opacity: 1;
 }
+
+.autodestruction-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.final-message {
+  color: #00ff00;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  animation: flicker 0.15s infinite;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 20px;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.8; text-shadow: 0 0 10px #00ff00; }
+  50% { opacity: 1; text-shadow: 0 0 20px #00ff00; }
+  100% { opacity: 0.9; text-shadow: 0 0 10px #00ff00; }
+}
+
