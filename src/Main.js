@@ -220,22 +220,22 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
         } else if (currentPath === '/archives') {
           if (isLong) {
             response = `total 1
-- rw-r--r--  1 user  staff  5048 Mar 30 09:46 photo_de_groupe_b3.png`;
+- rw-r--r--  1 user  staff  5048 Mar 30 09:46 photo_confidenciel.jpg`;
           } else {
-            response = 'photo_de_groupe_b3.png';
+            response = 'photo_confidenciel.jpg';
           }
         }
         break;
       case 'download':
-        if (args[1] === 'photo_de_groupe_b3.png') {
+        if (args[1] === 'photo_confidenciel.jpg') {
           if (currentPath === '/archives') {
             const link = document.createElement('a');
-            link.href = '/photo_de_groupe_b3.png';
-            link.download = 'photo_de_groupe_b3.png';
+            link.href = '/photo_confidenciel.jpg';
+            link.download = 'photo_confidenciel.jpg';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            response = 'Téléchargement de photo_de_groupe_b3.png démarré...';
+            response = 'Téléchargement de photo_confidenciel.jpg démarré...';
           } else {
             response = 'download: fichier introuvable dans le répertoire courant.';
           }
@@ -320,7 +320,7 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
         if (currentPath === '~' || currentPath === '/') {
           files = ['archives', '.note_interne.txt'];
         } else if (currentPath === '/archives') {
-          files = ['photo_de_groupe_b3.png'];
+          files = ['photo_confidenciel.jpg'];
         }
         suggestions = files.filter(f => f.toLowerCase().startsWith(lastWord));
       }
