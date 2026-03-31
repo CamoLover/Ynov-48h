@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Fractal.css';
 
 const Fractal = () => {
@@ -12,6 +13,9 @@ const Fractal = () => {
   const [zoomLevel, setZoomLevel] = useState(200);
   const [discoveredCodes, setDiscoveredCodes] = useState([]);
   const discoveredCodesRef = useRef(new Set());
+  const [finalCode, setFinalCode] = useState('');
+  const [codeError, setCodeError] = useState(false);
+  const navigate = useNavigate();
 
   // Fractal state
   const stateRef = useRef({
@@ -36,29 +40,33 @@ const Fractal = () => {
       zoomThreshold: 4000000
     },
     {
-      x: -0.123,
-      y: 0.745,
-      color: 'red',
-      text: 'Code D: XR92',
-      zoomThreshold: 3500000
-    },
-    {
       x: 0.374,
       y: -0.1432,
       color: 'cyan',
       text: 'Code B: BB45',
       zoomThreshold: 3000000
-    },
-    {
-      x: 0.112,
-      y: 0.236,
-      color: 'magenta',
-      text: 'Code C: PM73',
-      zoomThreshold: 3800000
     }
   ];
 
   const secretRadius = 0.005;
+
+  // Check if all codes are discovered
+  const allCodesDiscovered = discoveredCodes.length === secretSpots.length;
+
+  // Handle final code submission
+  const handleFinalCodeSubmit = (e) => {
+    e.preventDefault();
+    const normalizedCode = finalCode.replace(/\s/g, '').toUpperCase();
+
+    if (normalizedCode === 'AE67BB45' || normalizedCode === 'AE67 BB45'.replace(/\s/g, '')) {
+      // Success! Navigate back to home with state
+      navigate('/', { state: { fromFractal: true } });
+    } else {
+      // Show error
+      setCodeError(true);
+      setTimeout(() => setCodeError(false), 2000);
+    }
+  };
 
   // Color cache for performance
   const colorCacheRef = useRef(new Map());
@@ -397,6 +405,29 @@ const Fractal = () => {
               </div>
             )}
           </div>
+
+          {allCodesDiscovered && (
+            <div className="final-code-input-container">
+              <form onSubmit={handleFinalCodeSubmit} className="final-code-form">
+                <input
+                  type="text"
+                  value={finalCode}
+                  onChange={(e) => setFinalCode(e.target.value)}
+                  placeholder="Entrez le code combiné (ex: AE67 BB45)"
+                  className={`final-code-input ${codeError ? 'error' : ''}`}
+                  autoFocus
+                />
+                <button type="submit" className="final-code-submit">
+                  Valider
+                </button>
+              </form>
+              {codeError && (
+                <div className="code-error-message">
+                  Code invalide ! Réessayez.
+                </div>
+              )}
+            </div>
+          )}
 
           <div ref={guidesRef} className="guides">
             {secretSpots.map((spot, index) => (

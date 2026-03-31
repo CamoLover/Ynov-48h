@@ -320,4 +320,134 @@
     margin-top: 6px;
     padding-top: 6px;
   }
+
+  .final-code-input-container {
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+  }
+
+  .final-code-input {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+
+  .final-code-submit {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+/* Final Code Input Styles */
+.final-code-input-container {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 255, 0, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.final-code-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.final-code-input {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 255, 0, 0.5);
+  border-radius: 4px;
+  color: #0f0;
+  min-width: 300px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.final-code-input:focus {
+  border-color: #0f0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.final-code-input::placeholder {
+  color: rgba(0, 255, 0, 0.4);
+  letter-spacing: 1px;
+  text-transform: none;
+}
+
+.final-code-input.error {
+  border-color: #ff0000;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.final-code-submit {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  padding: 12px 25px;
+  background: rgba(0, 255, 0, 0.2);
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  color: #0f0;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.final-code-submit:hover {
+  background: rgba(0, 255, 0, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+  transform: scale(1.05);
+}
+
+.final-code-submit:active {
+  transform: scale(0.95);
+}
+
+.code-error-message {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ff0000;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  animation: fadeInOut 2s ease-out;
+  white-space: nowrap;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  10%, 90% { opacity: 1; }
 }

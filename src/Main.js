@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import QRCodePuzzle from './QRCodePuzzle';
 
@@ -55,9 +55,22 @@ function Main() {
   const [showFinalMessage, setShowFinalMessage] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     inputRef.current?.focus();
+
+    // Check if coming back from fractal
+    if (location.state?.fromFractal) {
+      setOutput(prev => [...prev, {
+        command: 'FRACTAL_SUCCESS',
+        response: `[SYSTÈME] Codes fractals validés avec succès !
+TODO ajouter message fin`,
+        path: currentPath
+      }]);
+      // Clear the state to prevent showing message again on refresh
+      window.history.replaceState({}, document.title);
+    }
 
     // Get or create user ID
     let storedUserId = getCookie('efynov_user_id');
@@ -89,7 +102,7 @@ function Main() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [location]);
 
   const addNotification = (message) => {
     const newNotif = {
