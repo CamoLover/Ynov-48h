@@ -75,7 +75,6 @@ function Main() {
 
     socket.on('connect', () => {
       console.log('Connected to notification server');
-      addNotification('Connexion au serveur établie');
     });
 
     socket.on('notification', (data) => {
