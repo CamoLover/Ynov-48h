@@ -43,7 +43,8 @@ function Main() {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
   const [currentPath, setCurrentPath] = useState('~');
-  const [isArchivesUnlocked, setIsArchivesUnlocked] = useState(false);
+  const [isAwaitingPassword, setIsAwaitingPassword] = useState(false);
+  const [pendingPath, setPendingPath] = useState(null);
   const [userId, setUserId] = useState('');
   const [os, setOs] = useState('');
   const [notifications, setNotifications] = useState([]);
@@ -113,7 +114,24 @@ function Main() {
   const handleCommand = (e) => {
     e.preventDefault();
     const rawInput = input.trim();
-    if (!rawInput) return;
+    if (!rawInput && !isAwaitingPassword) return;
+
+    if (isAwaitingPassword) {
+      if (rawInput === '1.20') {
+        setOutput([...output, { command: '(hidden password)', response: '[ACCÈS AUTORISÉ] Entrée dans le répertoire archives.', path: currentPath }]);
+        setCurrentPath(pendingPath);
+        setIsAwaitingPassword(false);
+        setPendingPath(null);
+        setInput('');
+        return;
+      } else {
+        setOutput([...output, { command: '(hidden password)', response: '[ERREUR] Mot de passe incorrect. Accès refusé.', path: currentPath }]);
+        setIsAwaitingPassword(false);
+        setPendingPath(null);
+        setInput('');
+        return;
+      }
+    }
 
     // Split args properly, handling quotes
     const commandRegex = rawInput.match(/(?:[^\s"]+|"[^"]*")+/g);
@@ -134,8 +152,7 @@ function Main() {
   LS        - Lister le contenu du répertoire
   CAT       - Afficher le contenu d'un fichier
   DOWNLOAD  - Télécharger un fichier localement
-  DECRYPT   - Décrypter un message
-  UNLOCK    - Déverrouiller un répertoire protégé`;
+  DECRYPT   - Décrypter un message`;
         break;
       case 'ping':
         response = 'PONG';
@@ -144,16 +161,7 @@ function Main() {
         setOutput([]);
         setInput('');
         return;
-      case 'unlock':
-        if (args[1] === '1.20') {
-          setIsArchivesUnlocked(true);
-          response = '[OK] Répertoires protégés déverrouillés.';
-        } else if (!args[1]) {
-          response = 'Usage: UNLOCK <code>';
-        } else {
-          response = '[ERREUR] Code incorrect.';
-        }
-        break;
+
       case 'cat':
         if (args[1] === '.note_interne.txt') {
           if (currentPath === '~' || currentPath === '/') {
@@ -173,11 +181,9 @@ Accès via /archives.`;
         break;
       case 'cd':
         if (args[1] === '/archives' || args[1] === 'archives') {
-          if (isArchivesUnlocked) {
-            newPath = '/archives';
-          } else {
-            response = `cd: archives: Accès refusé. Ce répertoire est verrouillé.`;
-          }
+          setIsAwaitingPassword(true);
+          setPendingPath('/archives');
+          response = 'Activation du protocole de sécurité. Mot de passe requis :';
         } else if (args[1] === '/' || args[1] === '..' || args[1] === '~') {
           newPath = '~';
         } else if (!args[1]) {
@@ -294,7 +300,7 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
       
       if (words.length === 1) {
         // Complete commands
-        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt', 'unlock', 'hack_cafet'];
+        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt','hack_cafet'];
         suggestions = commands.filter(c => c.startsWith(lastWord));
       } else {
         // Complete files based on path
@@ -412,10 +418,12 @@ Instruction : Envoyez "CAFÉ" par mail à admin@ynov.com pour valider votre expl
           </div>
 
           <form onSubmit={handleCommand} className="input-line">
-            <span className="prompt">user@EFYNOV:{currentPath}$</span>
+            <span className="prompt">
+              {isAwaitingPassword ? 'PASSWORD REQUIRED:' : `user@EFYNOV:${currentPath}$`}
+            </span>
             <input
               ref={inputRef}
-              type="text"
+              type={isAwaitingPassword ? 'password' : 'text'}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
