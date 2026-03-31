@@ -300,7 +300,7 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
       
       if (words.length === 1) {
         // Complete commands
-        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt', 'hack_cafet'];
+        const commands = ['help', 'ping', 'clear', 'cd', 'ls', 'cat', 'download', 'decrypt','hack_cafet'];
         suggestions = commands.filter(c => c.startsWith(lastWord));
       } else {
         // Complete files based on path
