@@ -50,6 +50,8 @@ function Main() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isPuzzleActive, setIsPuzzleActive] = useState(false);
+  const [isAutodestructionActive, setIsAutodestructionActive] = useState(false);
+  const [showFinalMessage, setShowFinalMessage] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -243,6 +245,16 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
         response = '[!] ERREUR : Tentative de piratage du solde IZLY détectée. Brouillage activé.';
         setTimeout(() => setIsPuzzleActive(true), 2000);
         break;
+      case 'execute':
+        if (args[1] === 'autodestruction.sh') {
+          response = '[SYSTEM] Initialisation de la séquence d\'autodestruction...';
+          handleAutodestruction();
+        } else if (!args[1]) {
+          response = 'execute: argument manquant.';
+        } else {
+          response = `execute: ${args[1]}: Fichier non trouvé.`;
+        }
+        break;
       default:
         response = `Commande inconnue: ${baseCommand}. Tapez HELP pour voir les commandes disponibles.`;
     }
@@ -250,6 +262,25 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
     setOutput([...output, { command: rawInput, response, path: currentPath }]);
     setCurrentPath(newPath);
     setInput('');
+  };
+
+  const handleAutodestruction = async () => {
+    const steps = [
+      "[SYSTEM] extinction des lumières du bâtiment A... OK",
+      "[SYSTEM] Verrouillage des salles de TP... OK",
+      "[SYSTEM] Suppression des notes du module Java... OK"
+    ];
+
+    for (const step of steps) {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setOutput(prev => [...prev, { command: '', response: step, path: currentPath }]);
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsAutodestructionActive(true);
+    
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    setShowFinalMessage(true);
   };
 
   const handleKeyDown = (e) => {
@@ -300,6 +331,15 @@ Instruction : Envoyez "CAFÉ" par mail à admin@ynov.com pour valider votre expl
         inputRef.current?.focus();
       }
     }}>
+      {isAutodestructionActive && (
+        <div className="autodestruction-overlay">
+          {showFinalMessage && (
+            <div className="final-message">
+              Felicitation tu as reussi a pirater le systeme.
+            </div>
+          )}
+        </div>
+      )}
       {isPuzzleActive && (
         <QRCodePuzzle 
           onSolved={handlePuzzleSolved} 
