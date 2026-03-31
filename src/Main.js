@@ -70,14 +70,35 @@ function Main() {
 
     // Check if coming back from fractal
     if (location.state?.fromFractal) {
-      setOutput(prev => [...prev, {
-        command: 'FRACTAL_SUCCESS',
-        response: `[SYSTÈME] Codes fractals validés avec succès !
-TODO ajouter message fin`,
-        path: currentPath
-      }]);
       // Clear the state to prevent showing message again on refresh
       window.history.replaceState({}, document.title);
+
+      const triggerEndSequence = async () => {
+        setOutput(prev => [...prev, {
+          command: 'FRACTAL_SUCCESS',
+          response: '[SYSTÈME] Codes fractals validés avec succès !',
+          path: '~'
+        }]);
+
+        const steps = [
+          "[SYSTEM] Rétablissement du courant dans le bâtiment A... OK",
+          "[SYSTEM] Déverrouillage des portes du campus... OK",
+          "[SYSTEM] Redémarrage des serveurs centraux... OK"
+        ];
+
+        for (const step of steps) {
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          setOutput(prev => [...prev, { command: '(system)', response: step, path: '~' }]);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setIsAutodestructionActive(true);
+        
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        setShowFinalMessage(true);
+      };
+
+      triggerEndSequence();
     }
 
     // Get or create user ID
@@ -271,16 +292,6 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
         response = '[!] ERREUR : Tentative de piratage du solde IZLY détectée. Brouillage activé.';
         setTimeout(() => setIsPuzzleActive(true), 2000);
         break;
-      case 'execute':
-        if (args[1] === 'autodestruction.sh') {
-          response = '[SYSTEM] Initialisation de la séquence d\'autodestruction...';
-          handleAutodestruction();
-        } else if (!args[1]) {
-          response = 'execute: argument manquant.';
-        } else {
-          response = `execute: ${args[1]}: Fichier non trouvé.`;
-        }
-        break;
       default:
         response = `Commande inconnue: ${baseCommand}. Tapez HELP pour voir les commandes disponibles.`;
     }
@@ -290,24 +301,6 @@ d rwxr-xr-x  2 user  staff  64 Mar 30 11:20 archives
     setInput('');
   };
 
-  const handleAutodestruction = async () => {
-    const steps = [
-      "[SYSTEM] extinction des lumières du bâtiment A... OK",
-      "[SYSTEM] Verrouillage des salles de TP... OK",
-      "[SYSTEM] Suppression des notes du module Java... OK"
-    ];
-
-    for (const step of steps) {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setOutput(prev => [...prev, { command: '', response: step, path: currentPath }]);
-    }
-
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsAutodestructionActive(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    setShowFinalMessage(true);
-  };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Tab') {
@@ -361,7 +354,9 @@ Instruction : Envoyez "CAFÉ" par mail à ynov@camolover.dev pour valider votre 
         <div className="autodestruction-overlay">
           {showFinalMessage && (
             <div className="final-message">
-              Les Portes de Ynov sont reouvertes
+              Les Portes de Ynov sont reouvertes.
+              <br />
+              Felicitation tu as reussi a pirater le systeme.
             </div>
           )}
         </div>
