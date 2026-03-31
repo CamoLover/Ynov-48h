@@ -10,6 +10,8 @@ const Fractal = () => {
   const [popup, setPopup] = useState({ visible: false, text: '' });
   const [isRendering, setIsRendering] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(200);
+  const [discoveredCodes, setDiscoveredCodes] = useState([]);
+  const discoveredCodesRef = useRef(new Set());
 
   // Fractal state
   const stateRef = useRef({
@@ -193,7 +195,22 @@ const Fractal = () => {
       );
 
       if (distance < secretRadius && zoom > spot.zoomThreshold) {
-        setPopup({ visible: true, text: spot.text });
+        // Check if this code was already discovered using ref for immediate check
+        if (!discoveredCodesRef.current.has(spot.text)) {
+          // Mark as discovered immediately
+          discoveredCodesRef.current.add(spot.text);
+
+          // Add to discovered codes list
+          setDiscoveredCodes(prev => [...prev, spot.text]);
+
+          // Show popup
+          setPopup({ visible: true, text: spot.text });
+
+          // Auto-dismiss popup after 1 second
+          setTimeout(() => {
+            setPopup({ visible: false, text: '' });
+          }, 1000);
+        }
         return;
       }
     }
@@ -370,6 +387,15 @@ const Fractal = () => {
           <div className="instruction-text">
             Mettez les codes dans l'ordre alphabétique
             <div className="zoom-indicator">Zoom: {zoomLevel.toLocaleString()}x</div>
+            {discoveredCodes.length > 0 && (
+              <div className="discovered-codes">
+                {discoveredCodes.map((code, index) => (
+                  <div key={index} className="code-item">
+                    {code}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div ref={guidesRef} className="guides">
