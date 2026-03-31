@@ -1,9 +1,11 @@
 import './Login.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
 function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [identifiant, setIdentifiant] = useState('');
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
@@ -20,6 +22,7 @@ function Login() {
 
         if (identifiant === secretCredentials.identifiant && password === secretCredentials.password) {
             setLoginStatus('success');
+            login(); // Set authentication state
             navigate('/');
             return;
         }
